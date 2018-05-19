@@ -2,9 +2,9 @@
 
     file        : racemain.h
     created     : Sat Nov 16 12:14:57 CET 2002
-    copyright   : (C) 2002 by Eric Espié                        
-    email       : eric.espie@torcs.org   
-    version     : $Id: racemain.h,v 1.3 2004/04/05 18:25:00 olethros Exp $                                  
+    copyright   : (C) 2002 by Eric Espiï¿½
+    email       : eric.espie@torcs.org
+    version     : $Id: racemain.h,v 1.3 2004/04/05 18:25:00 olethros Exp $
 
  ***************************************************************************/
 
@@ -16,9 +16,9 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- 
-/** @file    
-    		
+
+/** @file
+
     @author	<a href=mailto:torcs@free.fr>Eric Espie</a>
     @version	$Id: racemain.h,v 1.3 2004/04/05 18:25:00 olethros Exp $
 */
@@ -34,7 +34,4 @@ extern int  ReRaceEnd(void);
 extern int  RePostRace(void);
 extern int  ReEventShutdown(void);
 
-#endif /* _RACEMAIN_H_ */ 
-
-
-
+#endif /* _RACEMAIN_H_ */

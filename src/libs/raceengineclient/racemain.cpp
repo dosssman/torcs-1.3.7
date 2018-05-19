@@ -1,26 +1,26 @@
 /***************************************************************************
 
-    file        : racemain.cpp
-    created     : Sat Nov 16 12:13:31 CET 2002
-    copyright   : (C) 2002-2013 by Eric Espie, Bernhard Wymann                    
-    email       : eric.espie@torcs.org   
-    version     : $Id: racemain.cpp,v 1.13.2.11 2014/05/22 17:21:38 berniw Exp $                                  
+file        : racemain.cpp
+created     : Sat Nov 16 12:13:31 CET 2002
+copyright   : (C) 2002-2013 by Eric Espie, Bernhard Wymann
+email       : eric.espie@torcs.org
+version     : $Id: racemain.cpp,v 1.13.2.11 2014/05/22 17:21:38 berniw Exp $
 
- ***************************************************************************/
+***************************************************************************/
 
 /***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+***************************************************************************/
 
-/** @file   
-    		
-    @author	<a href=mailto:eric.espie@torcs.org>Eric Espie</a>
-    @version	$Id: racemain.cpp,v 1.13.2.11 2014/05/22 17:21:38 berniw Exp $
+/** @file
+
+@author	<a href=mailto:eric.espie@torcs.org>Eric Espie</a>
+@version	$Id: racemain.cpp,v 1.13.2.11 2014/05/22 17:21:38 berniw Exp $
 */
 
 #include <stdlib.h>
@@ -316,7 +316,12 @@ static int reRaceRealStart(void)
 
 	if ((ReInfo->_displayMode != RM_DISP_MODE_CONSOLE) &&  ReInfo->_reGraphicItf.initview != 0) {
 		GfScrGetSize(&sw, &sh, &vw, &vh);
-		ReInfo->_reGraphicItf.initview((sw-vw)/2, (sh-vh)/2, vw, vh, GR_VIEW_STD, ReInfo->_reGameScreen);
+		// dosssman
+		// Fixed rendering for TRAINING mode
+		// May affect other aspects ( probably)
+		// ReInfo->_reGraphicItf.initview((sw-vw)/2, (sh-vh)/2, vw, vh, GR_VIEW_STD, ReInfo->_reGameScreen);
+		ReInfo->_reGraphicItf.initview(0, 0, vw, vh, GR_VIEW_STD, ReInfo->_reGameScreen);
+		// end dosssman
 
 		if (ReInfo->_displayMode == RM_DISP_MODE_NORMAL) {
 			/* RmLoadingScreenSetText("Loading Cars 3D Objects..."); */
@@ -523,9 +528,9 @@ int ReRaceStop(void)
 	if (RESTART!=1) {
 		if (!strcmp(GfParmGetStr(params, ReInfo->_reRaceName, RM_ATTR_ALLOW_RESTART, RM_VAL_NO), RM_VAL_NO)) {
 			StopScrHandle = RmTriStateScreen("Race Stopped",
-						"Abandon Race", "Abort current race", AbortRaceHookInit(),
-						"Resume Race", "Return to Race", BackToRaceHookInit(),
-						"Quit Game", "Quit the game", QuitHookInit());
+			"Abandon Race", "Abort current race", AbortRaceHookInit(),
+			"Resume Race", "Return to Race", BackToRaceHookInit(),
+			"Quit Game", "Quit the game", QuitHookInit());
 		} else {
 			if (
 				(ReInfo->s->raceInfo.type == RM_TYPE_PRACTICE || ReInfo->s->raceInfo.type == RM_TYPE_QUALIF) &&
@@ -546,11 +551,11 @@ int ReRaceStop(void)
 				StopScrHandle = RmNStateScreen("Race Stopped", label, tip, screen, 5);
 			} else {
 				StopScrHandle = RmFourStateScreen("Race Stopped",
-							"Restart Race", "Restart the current race", RestartRaceHookInit(),
-							"Abandon Race", "Abort current race", AbortRaceHookInit(),
-							"Resume Race", "Return to Race", BackToRaceHookInit(),
-							"Quit Game", "Quit the game", QuitHookInit());
-				}
+				"Restart Race", "Restart the current race", RestartRaceHookInit(),
+				"Abandon Race", "Abort current race", AbortRaceHookInit(),
+				"Resume Race", "Return to Race", BackToRaceHookInit(),
+				"Quit Game", "Quit the game", QuitHookInit());
+			}
 		}
 	}
 	return RM_ASYNC | RM_NEXT_STEP;
@@ -646,4 +651,3 @@ int ReEventShutdown(void)
 
 	return RM_SYNC | ret;
 }
-

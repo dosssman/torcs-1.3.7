@@ -3,8 +3,8 @@
     file        : racemanmenu.cpp
     created     : Fri Jan  3 22:24:41 CET 2003
     copyright   : (C) 2003-2014 by Eric Espie, Bernhard Wymann
-    email       : eric.espie@torcs.org   
-    version     : $Id: racemanmenu.cpp,v 1.5.2.4 2014/02/04 14:01:39 berniw Exp $                                  
+    email       : eric.espie@torcs.org
+    version     : $Id: racemanmenu.cpp,v 1.5.2.4 2014/02/04 14:01:39 berniw Exp $
 
  ***************************************************************************/
 
@@ -17,8 +17,8 @@
  *                                                                         *
  ***************************************************************************/
 
-/** @file   
-    		
+/** @file
+
     @author	<a href=mailto:eric.espie@torcs.org>Eric Espie</a>
     @version	$Id: racemanmenu.cpp,v 1.5.2.4 2014/02/04 14:01:39 berniw Exp $
 */
@@ -55,7 +55,7 @@ reConfigBack(void)
 	void *params = ReInfo->params;
 
 	/* Go back one step in the conf */
-	GfParmSetNum(params, RM_SECT_CONF, RM_ATTR_CUR_CONF, NULL, 
+	GfParmSetNum(params, RM_SECT_CONF, RM_ATTR_CUR_CONF, NULL,
 			GfParmGetNum(params, RM_SECT_CONF, RM_ATTR_CUR_CONF, NULL, 1) - 2);
 
 	reConfigRunState();
@@ -116,21 +116,21 @@ reConfigRunState(void)
 	void *params = ReInfo->params;
 	const int BUFSIZE = 1024;
 	char path[BUFSIZE];
-	
+
 	curConf = (int)GfParmGetNum(params, RM_SECT_CONF, RM_ATTR_CUR_CONF, NULL, 1);
 	if (curConf > GfParmGetEltNb(params, RM_SECT_CONF)) {
 		GfOut("End of configuration\n");
 		GfParmWriteFile(NULL, ReInfo->params, ReInfo->_reName);
 		goto menuback;
 	}
-	
+
 	snprintf(path, BUFSIZE, "%s/%d", RM_SECT_CONF, curConf);
 	conf = GfParmGetStr(params, path, RM_ATTR_TYPE, 0);
 	if (!conf) {
 		GfOut("no %s here %s\n", RM_ATTR_TYPE, path);
 		goto menuback;
 	}
-	
+
 	GfOut("Configuration step %s\n", conf);
 	if (!strcmp(conf, RM_VAL_TRACKSEL)) {
 		/* Track Select Menu */
@@ -142,7 +142,7 @@ reConfigRunState(void)
 		}
 		ts.param = ReInfo->params;
 		ts.trackItf = ReInfo->_reTrackItf;
-		RmTrackSelect(&ts);	
+		RmTrackSelect(&ts);
 	} else if (!strcmp(conf, RM_VAL_DRVSEL)) {
 		/* Drivers select menu */
 		ds.nextScreen = reConfigHookInit();
@@ -153,7 +153,7 @@ reConfigRunState(void)
 		}
 		ds.param = ReInfo->params;
 		RmDriversSelect(&ds);
-	
+
 	} else if (!strcmp(conf, RM_VAL_RACECONF)) {
 		/* Race Options menu */
 		rp.nextScreen = reConfigHookInit();
@@ -183,10 +183,10 @@ reConfigRunState(void)
 		}
 		RmRaceParamMenu(&rp);
 	}
-	
+
 	curConf++;
 	GfParmSetNum(params, RM_SECT_CONF, RM_ATTR_CUR_CONF, NULL, curConf);
-	
+
 	return;
 
     /* Back to the race menu */
@@ -210,7 +210,7 @@ reSelectLoadFile(char *filename)
 {
 	const int BUFSIZE = 1024;
 	char buf[BUFSIZE];
-	
+
 	snprintf(buf, BUFSIZE, "%sresults/%s/%s", GetLocalDir(), ReInfo->_reFilename, filename);
 	GfOut("Loading Saved File %s...\n", buf);
 	ReInfo->results = GfParmReadFile(buf, GFPARM_RMODE_STD | GFPARM_RMODE_CREAT);
@@ -226,10 +226,10 @@ static void
 reLoadMenu(void *prevHandle)
 {
 	void *params = ReInfo->params;
-	
+
 	fs.prevScreen = prevHandle;
 	fs.select = reSelectLoadFile;
-	
+
 	const char* str = GfParmGetStr(params, RM_SECT_HEADER, RM_ATTR_NAME, 0);
 	if (str) {
 		fs.title = str;
@@ -237,7 +237,7 @@ reLoadMenu(void *prevHandle)
 
 	snprintf(varbuf, VARBUFSIZE, "%sresults/%s", GetLocalDir(), ReInfo->_reFilename);
 	fs.path = varbuf;
-	
+
 	RmFileSelect((void*)&fs);
 }
 
@@ -250,16 +250,16 @@ ReRacemanMenu(void)
 		GfuiScreenRelease(racemanMenuHdle);
 	}
 
-	racemanMenuHdle = GfuiScreenCreateEx(NULL, 
-					NULL, (tfuiCallback)NULL, 
-					NULL, (tfuiCallback)NULL, 
+	racemanMenuHdle = GfuiScreenCreateEx(NULL,
+					NULL, (tfuiCallback)NULL,
+					NULL, (tfuiCallback)NULL,
 					1);
 
 	const char* str = GfParmGetStr(params, RM_SECT_HEADER, RM_ATTR_BGIMG, 0);
 	if (str) {
 		GfuiScreenAddBgImg(racemanMenuHdle, str);
 	}
-	
+
 	GfuiMenuDefaultKeysAdd(racemanMenuHdle);
 
 	str = GfParmGetStr(params, RM_SECT_HEADER, RM_ATTR_NAME, 0);
@@ -272,7 +272,7 @@ ReRacemanMenu(void)
 			"New Race", "Start a New Race",
 			NULL, ReStartNewRace);
 
-	GfuiMenuButtonCreate(racemanMenuHdle, 
+	GfuiMenuButtonCreate(racemanMenuHdle,
 			"Configure Race", "Configure The Race",
 			NULL, reConfigureMenu);
 
@@ -281,11 +281,11 @@ ReRacemanMenu(void)
 /* 			 TorcsDriverMenuInit(racemanMenuHdle), GfuiScreenActivate); */
 
 	if (GfParmGetEltNb(params, RM_SECT_TRACKS) > 1) {
-		GfuiMenuButtonCreate(racemanMenuHdle, 
+		GfuiMenuButtonCreate(racemanMenuHdle,
 					"Load", "Load a Previously Saved Game",
 					racemanMenuHdle, reLoadMenu);
 	}
-	
+
 	GfuiMenuBackQuitButtonCreate(racemanMenuHdle,
 				"Back to Main", "Return to previous Menu",
 				ReInfo->_reMenuScreen, GfuiScreenActivate);
@@ -308,16 +308,16 @@ ReNewTrackMenu(void)
 	void *results = ReInfo->results;
 	const int BUFSIZE = 1024;
 	char buf[BUFSIZE];
-	
+
 	if (newTrackMenuHdle) {
 		GfuiScreenRelease(newTrackMenuHdle);
 	}
 
-	newTrackMenuHdle = GfuiScreenCreateEx(NULL, 
-						NULL, (tfuiCallback)NULL, 
-						NULL, (tfuiCallback)NULL, 
+	newTrackMenuHdle = GfuiScreenCreateEx(NULL,
+						NULL, (tfuiCallback)NULL,
+						NULL, (tfuiCallback)NULL,
 						1);
-	
+
 	const char* str = GfParmGetStr(params, RM_SECT_HEADER, RM_ATTR_BGIMG, 0);
 	if (str) {
 		GfuiScreenAddBgImg(newTrackMenuHdle, str);
@@ -325,33 +325,33 @@ ReNewTrackMenu(void)
 
 	str = GfParmGetStr(params, RM_SECT_HEADER, RM_ATTR_NAME, "");
 	GfuiTitleCreate(newTrackMenuHdle, str, strlen(str));
-	
+
 	GfuiMenuDefaultKeysAdd(newTrackMenuHdle);
-	
+
 	snprintf(buf, BUFSIZE, "Race Day #%d/%d on %s",
 		(int)GfParmGetNum(results, RE_SECT_CURRENT, RE_ATTR_CUR_TRACK, NULL, 1),
 		GfParmGetEltNb(params, RM_SECT_TRACKS),
 		ReInfo->track->name);
-	
+
 	GfuiLabelCreateEx(newTrackMenuHdle,
 				buf,
 				red,
 				GFUI_FONT_MEDIUM_C,
 				320, 420,
 				GFUI_ALIGN_HC_VB, 50);
-	
+
 	GfuiMenuButtonCreate(newTrackMenuHdle,
 				"Start Event", "Start The Current Race",
 				NULL, reStateManage);
-	
-	
-	GfuiMenuButtonCreate(newTrackMenuHdle, 
+
+
+	GfuiMenuButtonCreate(newTrackMenuHdle,
 				"Abandon", "Abandon The Race",
 				ReInfo->_reMenuScreen, GfuiScreenActivate);
-	
+
 	GfuiAddKey(newTrackMenuHdle, 27,  "Abandon", ReInfo->_reMenuScreen, GfuiScreenActivate, NULL);
-	
+
 	GfuiScreenActivate(newTrackMenuHdle);
-	
+
 	return RM_ASYNC | RM_NEXT_STEP;
 }
